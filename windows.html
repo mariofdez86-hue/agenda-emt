@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgendaBus para Windows – Descarga</title>
+    <meta name="description" content="Descarga AgendaBus para Windows: turnos, libranzas y retribuciones en el ordenador.">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0B1628;
+            color: #DCE8F8;
+            line-height: 1.7;
+            padding: 24px 16px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        header {
+            background: rgba(239,159,39,0.12);
+            border-left: 4px solid #EF9F27;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 28px;
+        }
+        header h1 { color: #EF9F27; font-size: 1.6rem; margin-bottom: 6px; }
+        header p  { color: #8BAEC8; font-size: 0.85rem; }
+        section {
+            background: #132030;
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin-bottom: 16px;
+        }
+        h2 { color: #EF9F27; font-size: 1rem; margin-bottom: 10px; }
+        p  { color: #9DB8CC; font-size: 0.9rem; margin-bottom: 8px; }
+        ul { list-style: none; padding: 0; }
+        li {
+            color: #9DB8CC;
+            font-size: 0.9rem;
+            padding: 4px 0 4px 16px;
+            position: relative;
+        }
+        li::before {
+            content: "•";
+            color: #EF9F27;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        .descarga { text-align: center; padding: 26px 20px; }
+        .btn {
+            display: inline-block;
+            background: #EF9F27;
+            color: #0B1628;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            margin: 6px 0 10px;
+        }
+        .btn:hover { background: #F7B44E; }
+        .meta { color: #6F8AA6; font-size: 0.8rem; }
+        .aviso {
+            background: rgba(239,159,39,0.10);
+            border-left: 3px solid #EF9F27;
+            border-radius: 6px;
+            padding: 12px 14px;
+            margin-top: 10px;
+        }
+        .aviso strong { color: #EF9F27; }
+        ol { padding-left: 20px; }
+        ol li { color: #9DB8CC; font-size: 0.9rem; padding: 4px 0; }
+        ol li::before { content: none; }
+        code {
+            background: #0B1628;
+            border: 1px solid #1E3048;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-size: 0.85em;
+            color: #8BD4F5;
+        }
+        footer {
+            text-align: center;
+            color: #6F8AA6;
+            font-size: 0.8rem;
+            padding: 20px 0 10px;
+        }
+        footer a { color: #EF9F27; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🚍 AgendaBus para Windows</h1>
+    <p>Tus turnos, libranzas y retribuciones también en el ordenador.</p>
+</header>
+
+<section class="descarga">
+    <a class="btn" href="https://github.com/mariofdez86-hue/agenda-emt/releases/latest/download/AgendaBus-Windows.msi">
+        ⬇ Descargar para Windows
+    </a>
+    <p class="meta">Instalador .msi · unos 64 MB · Windows 10 y 11 (64 bits)</p>
+</section>
+
+<section>
+    <h2>⚠️ Windows te va a avisar. Es normal.</h2>
+    <p>
+        Al abrir el instalador saldrá una pantalla azul que dice
+        <strong>«Windows protegió su PC»</strong>. No es que el archivo tenga nada raro:
+        pasa con todos los programas que no llevan una firma digital de pago, y esta app
+        la hago yo por mi cuenta.
+    </p>
+    <div class="aviso">
+        <p style="margin:0">
+            Para continuar: pulsa <strong>Más información</strong> y luego
+            <strong>Ejecutar de todas formas</strong>.
+        </p>
+    </div>
+</section>
+
+<section>
+    <h2>Cómo se instala</h2>
+    <ol>
+        <li>Descarga el archivo con el botón de arriba.</li>
+        <li>Ábrelo (doble clic) y pasa el aviso de Windows como se explica arriba.</li>
+        <li>Se instala solo, sin pedir contraseña de administrador.</li>
+        <li>Búscala en el menú Inicio como <strong>AgendaBus</strong>.</li>
+    </ol>
+    <p>
+        Si ya la tenías instalada, el instalador la <strong>actualiza encima</strong>:
+        no hace falta desinstalar nada y no se pierde lo que tengas metido.
+    </p>
+</section>
+
+<section>
+    <h2>Cómo pasar tus datos desde el móvil</h2>
+    <ol>
+        <li>En el móvil: <strong>Opciones → Copia de seguridad</strong> y guarda el archivo.</li>
+        <li>Pásalo al ordenador (WhatsApp contigo mismo, correo, cable…).</li>
+        <li>En el PC: <strong>Abrir backup</strong> y elige ese archivo.</li>
+    </ol>
+    <p>
+        Lo que cambies en el ordenador se queda en el ordenador. Para llevarlo de vuelta
+        al móvil, usa <strong>Exportar backup</strong> y ábrelo allí.
+    </p>
+</section>
+
+<section>
+    <h2>Tus datos son tuyos</h2>
+    <ul>
+        <li>Todo se guarda <strong>solo en tu ordenador</strong>, en tu carpeta de usuario.</li>
+        <li>No hay cuentas, ni registro, ni servidores: la app funciona sin internet.</li>
+        <li>Guarda <strong>copias automáticas</strong> de los últimos días por si acaso.</li>
+        <li>Si alguna vez no pudiera leer tus datos, <strong>te avisa y no toca nada</strong>.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>¿Problemas?</h2>
+    <p>
+        Escríbeme a <a href="mailto:mariofdez86@gmail.com" style="color:#EF9F27">mariofdez86@gmail.com</a>
+        contando qué pasa, o dímelo por el grupo.
+    </p>
+</section>
+
+<footer>
+    AgendaBus · Aplicación independiente hecha por y para conductores.<br>
+    <a href="privacidad.html">Política de privacidad</a>
+</footer>
+
+</body>
+</html>
