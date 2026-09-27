@@ -1,0 +1,1303 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manual de uso · AgendaBus</title>
+<meta name="description" content="Cómo se usa AgendaBus, la agenda para conductores de EMT Madrid: turnos, días generados, cambios, vacaciones y nómina.">
+<style>
+:root { color-scheme: light dark; }
+* { box-sizing: border-box; }
+body { font: 17px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+       max-width: 46rem; margin: 0 auto; padding: 2.5rem 1.25rem 5rem; background:#fbfaf7; color:#1f1d1a; }
+h1 { font-size: 1.9rem; line-height: 1.2; margin-bottom: .3rem; }
+.fecha { color:#6b665e; margin-top:0; font-size:.95rem; }
+.resumen { background:#fff4e0; border-left:4px solid #f59e0b; padding:.9rem 1.1rem; border-radius:6px; }
+.resumen p { margin:.4rem 0; }
+a { color: #b45309; }
+
+/* Buscador */
+.buscador { position: sticky; top: 0; z-index: 5; background:#fbfaf7; padding:.9rem 0 .6rem; margin-top:1.6rem; }
+.buscador input { width:100%; font:inherit; padding:.7rem .9rem; border-radius:8px;
+                  border:1.5px solid #e0d9cc; background:#fff; color:inherit; }
+.buscador input:focus { outline:none; border-color:#f59e0b; }
+.mandos { display:flex; gap:.6rem; align-items:center; margin-top:.5rem; flex-wrap:wrap; }
+.mandos button { font:inherit; font-size:.9rem; padding:.3rem .7rem; border-radius:6px;
+                 border:1px solid #e0d9cc; background:#fff; color:#b45309; cursor:pointer; }
+.mandos button:hover { border-color:#b45309; }
+.cuantos { color:#6b665e; font-size:.9rem; }
+
+/* Índice */
+nav.indice { margin-top:1.4rem; }
+nav.indice h2 { font-size:.85rem; letter-spacing:.09em; text-transform:uppercase; color:#6b665e; margin-bottom:.5rem; }
+nav.indice ul { list-style:none; padding:0; margin:0; columns:2; column-gap:1.4rem; }
+nav.indice li { break-inside:avoid; margin:.18rem 0; font-size:.95rem; }
+
+/* Apartados */
+details.sec { border:1px solid #e8e1d5; border-radius:8px; background:#fff; margin-top:.6rem; }
+details.sec > summary { cursor:pointer; padding:.8rem 1rem; font-weight:600; border-radius:8px; }
+details.sec > summary::marker { color:#b45309; }
+details.sec[open] > summary { border-bottom:1px solid #f0ebe1; }
+.dentro { padding:.2rem 1rem 1rem; }
+details.n2 { margin:.5rem 0 0; background:#fdfcfa; }
+details.n2 > summary { font-weight:500; font-size:.97rem; }
+
+article.paso { padding:.9rem 0; border-bottom:1px solid #f4efe6; }
+article.paso:last-child { border-bottom:none; }
+article.paso h3 { font-size:1.02rem; margin:0 0 .35rem; color:#8a4708; }
+article.paso p { margin:.45rem 0; }
+article.paso ul { margin:.45rem 0; padding-left:1.3rem; }
+article.paso li { margin:.2rem 0; }
+
+footer { margin-top:3rem; padding-top:1.2rem; border-top:1px solid #e8e1d5; color:#6b665e; font-size:.9rem; }
+[hidden] { display:none !important; }
+
+@media (prefers-color-scheme: dark) {
+  body { background:#111; color:#e8e6e1; }
+  a, article.paso h3 { color:#fbbf24; }
+  .resumen { background:#2a2110; }
+  .fecha, footer, .cuantos, nav.indice h2 { color:#a8a29e; }
+  .buscador { background:#111; }
+  .buscador input, .mandos button { background:#1b1917; border-color:#3a3632; color:#e8e6e1; }
+  .mandos button { color:#fbbf24; }
+  details.sec { background:#1b1917; border-color:#3a3632; }
+  details.n2 { background:#191715; }
+  details.sec[open] > summary { border-bottom-color:#2c2925; }
+  article.paso { border-bottom-color:#2c2925; }
+  footer { border-top-color:#3a3632; }
+}
+@media (max-width: 34rem) { nav.indice ul { columns:1; } }
+</style>
+</head>
+<body>
+
+<h1>Manual de uso de AgendaBus</h1>
+<p class="fecha">Actualizado en septiembre de 2026 · 18 apartados y 239 explicaciones</p>
+
+<div class="resumen">
+<p><strong>AgendaBus</strong> es la agenda para conductores de EMT Madrid: los turnos, los días
+generados, los cambios con compañeros, las vacaciones y lo que sale en la nómina.</p>
+<p>Esta página es el mismo manual que llevas dentro de la app, para poder consultarlo desde
+cualquier sitio o pasárselo a un compañero. ¿Dudas sueltas? El bot de Telegram
+<a href="https://t.me/AgendaBusSoporteBot">@AgendaBusSoporteBot</a> las contesta al momento.</p>
+</div>
+
+<div class="buscador">
+  <input id="q" type="search" placeholder="Buscar en el manual: minutos, L26, papeleta, vacaciones…"
+         autocomplete="off" aria-label="Buscar en el manual">
+  <div class="mandos">
+    <button type="button" id="abrir">Abrir todo</button>
+    <button type="button" id="cerrar">Cerrar todo</button>
+    <span class="cuantos" id="cuantos"></span>
+  </div>
+</div>
+
+<nav class="indice">
+  <h2>Apartados</h2>
+  <ul>
+<li><a href="#pantalla-mas">Pantalla «Más»</a></li>
+<li><a href="#retribuciones-tu-mes">Retribuciones (tu mes)</a></li>
+<li><a href="#inicio-dashboard">Inicio (Dashboard)</a></li>
+<li><a href="#agenda">Agenda</a></li>
+<li><a href="#mi-agenda">Mi Agenda</a></li>
+<li><a href="#vacaciones">Vacaciones</a></li>
+<li><a href="#cambios">Cambios</a></li>
+<li><a href="#calendario">Calendario</a></li>
+<li><a href="#documentos">Documentos</a></li>
+<li><a href="#estadisticas">Estadísticas</a></li>
+<li><a href="#perfil">Perfil</a></li>
+<li><a href="#opciones">Opciones</a></li>
+<li><a href="#widget-de-pantalla-de-inicio">Widget de pantalla de inicio</a></li>
+<li><a href="#exportar-calendario-a-pdf">Exportar calendario a PDF</a></li>
+<li><a href="#festivos-2026">Festivos 2026</a></li>
+<li><a href="#mis-recordatorios">Mis recordatorios</a></li>
+<li><a href="#pasatiempos">Pasatiempos</a></li>
+<li><a href="#actualizaciones">Actualizaciones 📋</a></li>
+  </ul>
+</nav>
+
+<main id="manual">
+<details class="sec n1" id="pantalla-mas">
+<summary>Pantalla «Más»</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Todas las pantallas en un sitio</h3>
+<p>La 5ª pestaña de la barra de abajo, «Más», es el acceso a todas las secciones de la app, ordenadas por categorías: Dinero, Mis datos, Mi empresa y Ayuda y extras.</p>
+</article>
+<article class="paso">
+<h3>Buscador</h3>
+<p>Arriba del todo tienes un buscador: escribe el nombre (o parte) de una pantalla y aparece al instante, sin tener que recorrer el menú.</p>
+</article>
+<article class="paso">
+<h3>Sin repetidos</h3>
+<p>Lo que ya tienes en la barra de abajo (Inicio, Agenda, Calendario, Cambios…) no se repite aquí. Si quitas alguna de la barra en Opciones, reaparece automáticamente en «Más».</p>
+</article>
+<article class="paso">
+<h3>Sin menú lateral</h3>
+<p>El antiguo menú lateral (botón ☰) se ha retirado: ahora navegas con la barra de abajo y con «Más», que ya reúne todas las secciones con su buscador.</p>
+</article>
+</div></details>
+<details class="sec n1" id="retribuciones-tu-mes">
+<summary>Retribuciones (tu mes)</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Dónde está</h3>
+<p>En Más › Dinero › Retribuciones. Es el detalle económico estimado de tu mes.</p>
+</article>
+<article class="paso">
+<h3>Elegir el mes</h3>
+<p>Con las flechas ◀ ▶ de la cabecera puedes ir a cualquier mes y año.</p>
+</article>
+<article class="paso">
+<h3>Qué calcula</h3>
+<p>Salario base, antigüedad, primas, agente único, CIPRA, pluses de sábado/domingo, traslado de estación, cambio de prestación, L26 trabajados, días generados cobrados, y una estimación del neto (IRPF, cuota sindical, seguridad social y ACE EMT). Es una estimación orientativa.</p>
+</article>
+<article class="paso">
+<h3>Foto de la nómina 🧾</h3>
+<p>Abajo del todo puedes guardar una foto de la nómina de ese mes (cámara o galería), una por mes. Se respalda igual que las papeletas de cambios.</p>
+</article>
+</div></details>
+<details class="sec n1" id="inicio-dashboard">
+<summary>Inicio (Dashboard)</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Panel 'Mis salidas' 🚌</h3>
+<p>Un panel azul estilo marcador de estación con tu cochera y reloj en vivo. Muestra dos filas: tu turno de HOY (línea, destino y horarios, con 'EN CURSO' si estás dentro del turno) y el de MAÑANA ('PRÓXIMO'). Toca cualquier fila para editar ese día. Abajo, 'Próxima entrada en' cuenta atrás hasta el inicio de tu próximo turno (busca hasta 14 días vista).</p>
+</article>
+<article class="paso">
+<h3>Tiempo de Madrid</h3>
+<p>Bajo el panel se muestra la fecha y el tiempo de Madrid: temperatura actual con su emoji, más la máxima (↑) y la mínima (↓) del día. Se actualiza cada hora con Open-Meteo (sin registro).</p>
+</article>
+<article class="paso">
+<h3>Semana de correturnos de línea</h3>
+<p>Bajo la fecha aparece, de forma discreta, en qué semana del ciclo de correturnos de línea estás (ciclo de 40 semanas). Útil para los conductores de correturnos.</p>
+</article>
+<article class="paso">
+<h3>Lo que viene</h3>
+<p>Tres tarjetas con tu próxima libranza, tus próximas vacaciones y el próximo festivo, con los días que faltan. El cálculo de la libranza tiene en cuenta el cuadrante, los cambios con compañeros/empresa y los días compensatorios que hayas marcado como librados.</p>
+</article>
+<article class="paso">
+<h3>Banner de aniversario</h3>
+<p>El día que se cumple tu aniversario de entrada en EMT, aparece un banner verde en la pantalla de inicio con los años de antigüedad. Para que funcione debes tener tu fecha de ingreso registrada en Perfil.</p>
+</article>
+<article class="paso">
+<h3>Avisos de paga 💰</h3>
+<p>En los meses con paga aparece un banner: marzo, junio y septiembre (paga extra con la nómina), diciembre (paga extra el día 22) y el complemento de uniformidad (con la nómina de diciembre). En abril se avisa del premio de conducción (con la nómina). Aparecen automáticamente según el mes.</p>
+</article>
+</div></details>
+<details class="sec n1" id="agenda">
+<summary>Agenda</summary>
+<div class="dentro">
+<article class="paso">
+<h3>¿Qué es la Agenda?</h3>
+<p>Vista mensual con todos los días del mes y su tipo de turno, horario y línea. Navega entre meses con las flechas.</p>
+</article>
+<article class="paso">
+<h3>Añadir o editar un turno</h3>
+<p>Toca cualquier día para abrir el editor. Elige el tipo de día: Turno Seguido, Turno Partido, Guardia, Libre, Vacaciones, Festivo, Baja, Permiso Retribuido, Huelga, Formación o Prácticas.</p>
+</article>
+<article class="paso">
+<h3>Turno Seguido</h3>
+<p>Rellena la línea, código de turno, lugar de inicio, autobús y horario (H1 inicio / H1 fin). Puedes marcar si es salida forzosa. Si el día es festivo, el L15 se genera automáticamente al guardar. Si al final no lo trabajas, en ☀️ Festivo eliges si lo libras sin compensación (L10, lo pediste tú) o es un libre forzoso de la empresa (L11, cobra un plus de sábado).</p>
+</article>
+<article class="paso">
+<h3>Turno Partido</h3>
+<p>Igual que el seguido pero con dos tramos horarios: H1 y H2. También puedes indicar el lugar de inicio de la segunda parte. La app calcula automáticamente el total de minutos trabajados.</p>
+</article>
+<article class="paso">
+<h3>Guardia</h3>
+<p>Registra la línea y el horario de la guardia. No genera exceso de jornada.</p>
+</article>
+<article class="paso">
+<h3>Aviso de descanso inferior a 12h</h3>
+<p>Al rellenar el horario de un turno, la app comprueba en tiempo real el descanso con el turno anterior y el siguiente. Si el descanso es inferior a 12h aparece un aviso amarillo (genera L06); si es inferior a 10h el aviso es rojo (límite legal).</p>
+</article>
+<article class="paso">
+<h3>Libranza trabajada — L26</h3>
+<p>En los días de libranza del cuadrante (o días libres por cambio con compañero), aparece el toggle 'Libranza trabajada (genera L26)'. Actívalo si trabajas voluntariamente en tu día libre: se generará un L26 automáticamente al guardar.</p>
+</article>
+<article class="paso">
+<h3>Días generados — badges</h3>
+<p>En la agenda, los días que generan un compensatorio muestran un badge verde: 'L15 generado 🎉', 'L26 generado 🎉', 'L06 generado 🎉', 'L04 generado 🎉'. El L15 se crea solo al trabajar un festivo; el L06 se calcula automáticamente por acumulado.</p>
+</article>
+<article class="paso">
+<h3>Permiso Retribuido</h3>
+<p>Para días de permiso oficial: matrimonio, paternidad, defunción de familiar, enfermedad grave de familiar, mudanza, examen oficial, deber inexcusable u otro. Aparece en azul (distinto al verde de libranza). Cuenta para el premio de prestaciones.</p>
+</article>
+<article class="paso">
+<h3>Días Libre, Vacaciones, Festivo y Baja</h3>
+<p>Para Libre puedes añadir el código (L06, L26, LC1, L10, LRJ…). Para Festivo puedes indicar si es anual. Para Baja puedes añadir notas. Los días festivos muestran el número y la letra en rojo, igual que los domingos.</p>
+</article>
+<article class="paso">
+<h3>Huelga, Formación y Prácticas</h3>
+<p>Tres tipos de día para registrar jornadas de huelga (rojo), días de formación (verde) y días de prácticas (naranja). Aparecen en la agenda y en el widget, y no cuentan como trabajo para el cálculo de minutos ni para el L06.</p>
+</article>
+<article class="paso">
+<h3>Notas</h3>
+<p>Todos los tipos de día tienen un campo de notas libre para apuntar cualquier información adicional.</p>
+</article>
+<article class="paso">
+<h3>Importar turno desde captura del portal (en pruebas)</h3>
+<p>En el editor de un día encontrarás el botón 'Importar del portal'. Haz una captura de pantalla de la ficha de un turno en el Portal del Empleado y selecciónala con este botón. La app usará OCR para leer automáticamente la línea, código de turno, horarios y lugar de inicio. Función en pruebas: si el resultado no es correcto, un diálogo muestra el texto detectado para que puedas corregirlo manualmente.</p>
+</article>
+<article class="paso">
+<h3>Autocompletar (Fijo de Línea)</h3>
+<p>Si en tu Perfil tienes configurado el tipo 'Fijo de Línea', aparece el botón ✨ Autocompletar. Puedes rellenar solo ESTE MES o TODO EL AÑO de golpe, y elegir si pisas los días ya rellenados o solo completas los vacíos. Aplica el turno de cada temporada (y el cambio de cuadro que toque). Las temporadas que aún no tengas configuradas se quedan en blanco; cuando las metas, vuelve a autocompletar.</p>
+</article>
+<article class="paso">
+<h3>Forzosas</h3>
+<p>En la barra superior de la Agenda aparece el contador de forzosas del mes (ej. '2/10 forzosas'). Se pone amarillo a partir de 5 y rojo a partir de 7.</p>
+</article>
+</div></details>
+<details class="sec n1" id="mi-agenda">
+<summary>Mi Agenda</summary>
+<div class="dentro">
+<article class="paso">
+<h3>¿Qué es Mi Agenda?</h3>
+<p>Tu agenda personal, separada de la del trabajo, para apuntar tus cosas: citas, cumpleaños, recordatorios, planes… Se abre en Agenda › Mi Agenda, y también puedes ponerla como pestaña fija en la barra de abajo desde Opciones. De fondo ves tus libranzas, vacaciones y festivos del cuadrante, para organizarte mejor.</p>
+</article>
+<article class="paso">
+<h3>Añadir un evento</h3>
+<p>Toca un día y escribe el evento. Puedes elegir un icono, un color y el estilo del recuadro (relleno, reborde o punto), y activar un aviso con la antelación que quieras.</p>
+</article>
+<article class="paso">
+<h3>Copiar y pegar (📋)</h3>
+<p>Copia un evento con el icono 📋 y ve tocando los días en los que quieras repetirlo, sin tener que escribirlo otra vez. Pulsa 'Hecho' cuando termines.</p>
+</article>
+<article class="paso">
+<h3>Ordenar los eventos de un día</h3>
+<p>Si un día tiene varios eventos, arrástralos por el asa para ordenarlos: el de arriba es el que se ve en el calendario. Si hay dos el mismo día, el recuadro se parte a dos colores.</p>
+</article>
+<article class="paso">
+<h3>Vista de mes y de año</h3>
+<p>Cambia entre la vista mensual y la anual. En la vista de mes puedes pasar de mes con las flechas o, más rápido, deslizando el dedo a izquierda (mes siguiente) o derecha (mes anterior).</p>
+</article>
+<article class="paso">
+<h3>Avisos y PDF</h3>
+<p>Los eventos con aviso te avisan con una notificación. Además puedes exportar tu agenda personal a PDF para guardarla o compartirla.</p>
+</article>
+</div></details>
+<details class="sec n1" id="vacaciones">
+<summary>Vacaciones</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Registrar un periodo de vacaciones</h3>
+<p>Pulsa el botón '+' para añadir un nuevo periodo. Indica la fecha de inicio, la fecha de fin y una etiqueta (ej. 'Verano 1ª quincena').</p>
+</article>
+<article class="paso">
+<h3>Verano / Invierno</h3>
+<p>Marca si el periodo corresponde a vacaciones de verano o de invierno. Esto ayuda a organizar y distinguir los periodos en la lista.</p>
+</article>
+<article class="paso">
+<h3>Editar o eliminar</h3>
+<p>Pulsa sobre un periodo existente para editarlo, o desliza para eliminarlo.</p>
+</article>
+<article class="paso">
+<h3>Días en la Agenda</h3>
+<p>Los días incluidos en un periodo de vacaciones aparecen automáticamente marcados como 'Vacaciones' en la Agenda y el Calendario.</p>
+</article>
+<article class="paso">
+<h3>Cálculo de pesos (previsión de bola)</h3>
+<p>Activa el toggle 'Cálculo de pesos' para ver una tabla con los últimos 4 años, la bola que te tocó cada año y los puntos acumulados. Con ese total la app predice qué bola de verano podrías obtener el año siguiente, mostrando el nombre de la bola y su rango de fechas. El resultado es provisional: puede variar dependiendo del número de empleados por prestación en la fecha del sorteo.</p>
+</article>
+<article class="paso">
+<h3>Detección automática de bola</h3>
+<p>Si tienes las vacaciones de verano registradas en la app, la bola se detecta automáticamente comparando la fecha de inicio con la tabla oficial de bolas. Los años detectados se marcan sin icono; los introducidos a mano muestran ✏️.</p>
+</article>
+<article class="paso">
+<h3>Años sin datos — introducción manual</h3>
+<p>Para años anteriores a la app (o años sin datos registrados) pulsa 'Editar años sin datos'. Aparece un diálogo donde puedes seleccionar manualmente qué bola te tocó en cada año. Se marca con ✏️.</p>
+</article>
+<article class="paso">
+<h3>Año sin antigüedad EMT</h3>
+<p>Si tienes registrada tu fecha de ingreso en Perfil y llevas menos de 4 años, los años anteriores a tu ingreso se cuentan con 300 puntos (regla EMT para conductores nuevos). Se marcan con ➕.</p>
+</article>
+</div></details>
+<details class="sec n1" id="cambios">
+<summary>Cambios</summary>
+<div class="dentro">
+<article class="paso">
+<h3>¿Qué son los Cambios?</h3>
+<p>Registro de cambios de servicio realizados con compañeros, tanto cambios de día libre como cambios de turno completo.</p>
+</article>
+<article class="paso">
+<h3>Cambio de Libre</h3>
+<p>Indica el compañero, su número de empleado y teléfono. Pulsa el botón de calendario para seleccionar el día que tú trabajas (🟠) y el día que tú libras (🔵) — se abre directamente el selector de fecha del sistema. Añade notas si es necesario. El día que libras aparecerá automáticamente en la Agenda con el toggle de L26 disponible.</p>
+</article>
+<article class="paso">
+<h3>Cambio con empresa (dentro de C. libre)</h3>
+<p>Si el cambio es con la empresa (sin compañero concreto), activa el toggle 'Cambio con empresa' en el formulario de C. libre. Los campos de empleado y teléfono se ocultan y la tarjeta se muestra en verde.</p>
+</article>
+<article class="paso">
+<h3>Cambio de Turno</h3>
+<p>Indica la fecha del cambio y los datos del nuevo turno: línea, código, y los horarios H1 y H2 si aplica.</p>
+</article>
+<article class="paso">
+<h3>Cambio de Vacaciones 🏖️</h3>
+<p>Permuta completa de un período de vacaciones con otro conductor. Selecciona el tipo de bloque (21 días, 15 días, 6 días o 9 días invierno), luego pulsa el botón para elegir tu período y el del compañero/a en el calendario — se abre un selector de rango donde marcas inicio y fin de un tirón.</p>
+</article>
+<article class="paso">
+<h3>Cambio de Vacaciones Parcial ✂️</h3>
+<p>Permuta de un sub-período de vacaciones (15 o 6 días). Según el convenio, el cambio debe realizarse al principio o al final del período de 21 días. La app muestra un aviso recordatorio al crear este tipo de cambio.</p>
+</article>
+<article class="paso">
+<h3>Cambio Forzoso de Verano 🔥</h3>
+<p>Registra el cambio forzoso de verano cuando la empresa te obliga a trabajar en una de tus libranzas del período 25 jun – 16 sep. Indica el día que tomas (trabajas tu libranza, 🔥) y el día compensatorio que te dan a cambio (🔵). Solo aplica a grupos diurnos (1A–5H); SRN y Búho tienen ciclos distintos y no entran en este tipo de cambio.</p>
+</article>
+<article class="paso">
+<h3>Días susceptibles de forzoso</h3>
+<p>Los sábados y domingos de la 4ª semana del ciclo de libranza dentro del rango 25 jun – 16 sep son los candidatos al forzoso de verano (S+D libres sin V ni L libres alrededor). La app los marca en el Calendario con un punto naranja oscuro y los lista en la leyenda como 'Susc. forzoso'. Una vez registras tu forzoso del año, los puntos desaparecen automáticamente y la leyenda pasa a '✓ Forzoso hecho' tachada.</p>
+</article>
+<article class="paso">
+<h3>Alerta de día compensatorio en vacaciones</h3>
+<p>Si al registrar el forzoso eliges como día compensatorio una fecha que ya cae dentro de tus vacaciones registradas, la app te muestra un aviso rojo: '⚠️ Habla con Nombramientos'. Esto evita perder el día libre por solaparse con tu período de vacaciones. El aviso funciona también en el sentido inverso: si registras un forzoso ahora y meses después añades vacaciones que engloban tu día compensatorio, el aviso aparecerá en el diálogo de añadir vacaciones.</p>
+</article>
+<article class="paso">
+<h3>Efecto en Agenda del forzoso</h3>
+<p>El día tomado (🔥 miFecha) aparece en la Agenda con texto naranja 'Trabajo — Cambio forzoso de verano' y deja de pintarse como libranza, tanto en la vista mensual como en la anual. Al editar ese día, la nota se pre-rellena con 'Trabajo por cambio forzoso de verano' para que solo añadas la línea, horario, etc. El día compensatorio (🔵 suFecha) se marca automáticamente como libre con la nota 'Libre compensatorio forzoso de verano'.</p>
+</article>
+<article class="paso">
+<h3>Añadir foto de la papeleta</h3>
+<p>En el formulario de cambio encontrarás botones de cámara 📷 y galería 🖼️ para adjuntar una foto de la papeleta firmada. La foto se guarda en el dispositivo y aparece como miniatura en la tarjeta del cambio. Pulsa la miniatura para verla a pantalla completa.</p>
+</article>
+<article class="paso">
+<h3>Editar un cambio</h3>
+<p>Pulsa el botón de lápiz ✏️ en la tarjeta del cambio para abrirlo y modificar cualquier dato, incluida la foto. Los efectos en la Agenda se recalculan automáticamente al guardar.</p>
+</article>
+<article class="paso">
+<h3>Lista de cambios</h3>
+<p>Los cambios se muestran ordenados por fecha de registro. La tarjeta indica el tipo de cambio con su color y muestra la miniatura de la papeleta si la tiene adjunta. Las fechas se muestran en formato dd/mm/aaaa.</p>
+</article>
+</div></details>
+<details class="sec n1" id="calendario">
+<summary>Calendario</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Indicadores de punto bajo el número</h3>
+<p>Cada día del calendario puede mostrar varios puntos de colores: 🟣 Morado = trabajas en un día de cambio · 🟢 Verde = libras por cambio o el día tiene código de libre · 🟡 Amarillo = día compensatorio generado (L06, L15, L26…) · 🔴 Rosa = turno marcado como salida forzosa · 🟠 Naranja oscuro = día susceptible de cambio forzoso de verano (S/D de la 4ª semana entre el 25 jun y el 16 sep). Cuando registras tu forzoso del año, los puntos naranjas desaparecen del calendario completo y la leyenda se tacha. La leyenda en la parte inferior del calendario explica todos los colores.</p>
+</article>
+<article class="paso">
+<h3>Libranzas 2026 y 2027</h3>
+<p>El calendario ya incluye las libranzas oficiales de 2026 y 2027 según tu grupo y subgrupo (turno diurno). Al navegar entre meses y años, tus días libres se marcan automáticamente. Cámbialos a mano editando cada día desde la Agenda.</p>
+</article>
+<article class="paso">
+<h3>¿Y las retribuciones del mes?</h3>
+<p>El detalle económico del mes, las pagas y la foto de la nómina ya no están en el calendario: ahora son una pantalla propia, «Retribuciones», en Más › Dinero, donde además puedes elegir cualquier mes.</p>
+</article>
+<article class="paso">
+<h3>Comparar libres con otro grupo</h3>
+<p>Debajo del calendario tienes el comparador: elige otro grupo y subgrupo de libres y verás su mes junto al tuyo, para hacerte una idea de cómo libra otra gente.</p>
+</article>
+<article class="paso">
+<h3>Coincidir con un compañero</h3>
+<p>Comparte tu calendario de libres con un compañero y abre el suyo: en WhatsApp toca el archivo que te envía → «Abrir con AgendaBus». La app te dice los días que libráis los dos a la vez, ideal para cuadrar planes. Puedes exportar el resultado a PDF.</p>
+</article>
+<article class="paso">
+<h3>Cambiar de mes deslizando</h3>
+<p>Además de las flechas, puedes deslizar el dedo sobre el calendario: a la izquierda para el mes siguiente y a la derecha para el anterior.</p>
+</article>
+</div></details>
+<details class="sec n1" id="documentos">
+<summary>Documentos</summary>
+<div class="dentro">
+<article class="paso">
+<h3>¿Para qué sirve?</h3>
+<p>Sección dedicada a guardar fotos de los documentos oficiales que usas habitualmente como respaldo: papeletas de petición, partes de colisión, partes de lesionados y partes de incidencias.</p>
+</article>
+<article class="paso">
+<h3>Categorías disponibles</h3>
+<p>Peticiones (azul) · Partes de colisión (rosa) · Partes de lesionados (verde) · Partes de incidencias (amarillo). Cada categoría tiene su propia carpeta de almacenamiento.</p>
+</article>
+<article class="paso">
+<h3>Añadir una foto</h3>
+<p>Pulsa el icono de cámara 📷 para tomar una foto en el momento, o el icono de galería 🖼️ para importar una imagen ya guardada. Puedes hacerlo sin necesidad de expandir la categoría.</p>
+</article>
+<article class="paso">
+<h3>Ver las fotos</h3>
+<p>Toca la cabecera de la categoría para expandirla y ver todas las fotos en una fila horizontal. En la cabecera se muestra el número de fotos y el espacio que ocupan. Pulsa cualquier miniatura para verla a pantalla completa.</p>
+</article>
+<article class="paso">
+<h3>Borrar una foto</h3>
+<p>Pulsa la × que aparece en la esquina superior de cada miniatura. Se pedirá confirmación antes de eliminarla.</p>
+</article>
+</div></details>
+<details class="sec n1" id="estadisticas">
+<summary>Estadísticas</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Resumen del mes</h3>
+<p>Muestra los días trabajados, guardias, libres, vacaciones, bajas y permisos del mes seleccionado. Puedes cambiar de mes con las flechas.</p>
+</article>
+<article class="paso">
+<h3>Minutos y exceso de jornada</h3>
+<p>Tu jornada son 7 h en turno seguido y 7 h 30 en partido, contando de la hora de entrada a la de salida. Lo que pases de ahí es exceso, PERO el convenio (5.2.2) pone un tope diario: 25 minutos en seguido y 10 en partido. Por eso un día de 8 h te suma 25 minutos y no 60: los de más no se acumulan, aunque los trabajes.</p>
+</article>
+<article class="paso">
+<h3>Por qué el contador no se mueve todos los días</h3>
+<p>Los minutos se apuntan por SEMANAS, y una semana no cuenta hasta que pasa su domingo. Si miras el miércoles, lo de esa semana todavía no está.</p>
+<p>Y dentro de la semana los días se compensan entre sí: si el lunes te pasas 25 minutos y el jueves sales media hora antes, se restan. Si la semana entera sale en negativo se queda en cero —nunca te resta de lo que ya tenías—, pero tampoco suma. Por eso una semana con un día largo puede acabar sin sumar nada.</p>
+<p>Lo que NO espera al domingo: los partes, los descansos cortos y lo que el búho pase de su jornada. Eso cuenta en cuanto pasa el día.</p>
+</article>
+<article class="paso">
+<h3>Lo que no genera minutos</h3>
+<p>La guardia y el aumento tienen jornada fija (7 h 15) y no generan exceso, duren lo que duren. El personal —guardia, turno y guardia— va como aumento, así que tampoco. Y el L26/LEE que trabajas voluntario en tu libranza va aparte, en sus 80 €.</p>
+</article>
+<article class="paso">
+<h3>Acumulado L06</h3>
+<p>Muestra los minutos acumulados y cuántos L06 has generado: cada 439 minutos es uno. El contador se pone a cero al ganarlo, así que lo que ves es lo que llevas hacia el SIGUIENTE, de 0 a 438.</p>
+</article>
+<article class="paso">
+<h3>Horas nocturnas</h3>
+<p>Se calculan automáticamente las horas trabajadas entre las 22:00 y las 06:00. Regla 2025: tras las horas completas, de 6 a 35 min cuentan media hora y a partir de 36 min una hora entera (ej.: acabar a las 01:06 = 3,5 h de nocturnidad).</p>
+</article>
+<article class="paso">
+<h3>Premio de Seguridad</h3>
+<p>Puedes marcar si cumples las condiciones del premio: sin sanción y sin colisión. La app muestra el estado del premio en las estadísticas.</p>
+</article>
+<article class="paso">
+<h3>Días Generados (sección propia)</h3>
+<p>Los días generados (antes 'compensatorios') tienen ahora su propia pantalla en el menú: L03, L04, L05, L06, L10, L15, L18, L26, L30, LC1, LRJ y Otro, separando los generados automáticamente de los añadidos a mano. Puedes apuntar días manualmente con el botón '+'. El detalle económico por mes (nocturnas, minutos, partidos, nómina…) está en «Retribuciones» (Más › Dinero).</p>
+</article>
+<article class="paso">
+<h3>Solicitar un día libre — plazo y recordatorio</h3>
+<p>Al pulsar 'Librar' en un día compensatorio generado, la app comprueba si el plazo de solicitud ya está abierto según el convenio EMT: • Temporada de verano (25 jun – 16 sep): se puede pedir con 7 meses de antelación. • Resto del año: se puede pedir con 1 año de antelación. Si el plazo aún no ha abierto, aparece un aviso con la fecha exacta a partir de la cual puedes solicitarlo. Desde ese mismo aviso puedes programar un recordatorio automático para el día anterior a esa fecha, eligiendo la hora. La notificación te indicará exactamente qué día libre tienes que pedir.</p>
+</article>
+</div></details>
+<details class="sec n1" id="perfil">
+<summary>Perfil</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Datos personales</h3>
+<p>Rellena tu nombre, número de empleado, email, teléfono, cochera, grupo y subgrupo. Estos datos se usan para autocompletar información en otras pantallas.</p>
+</article>
+<article class="paso">
+<h3>Tipo de conductor</h3>
+<p>Puedes elegir entre tres tipos: Correturnos Mañana, Correturnos Tarde o Fijo de Línea. Esta selección activa funciones específicas en la Agenda.</p>
+</article>
+<article class="paso">
+<h3>Fijo de Línea — por temporadas</h3>
+<p>Si eres fijo de línea, indica tu línea y configura el turno de cada TEMPORADA (Invierno, Intermedia, Baja, Verano), cada una con sus plantillas de laboral (L-V), sábado y domingos/festivos. Si una temporada te deja sin turno, márcala como 'Sin turno (correturnos)' y esos días quedarán en blanco al autocompletar. Debajo puedes ajustar las FECHAS de cada temporada (vienen precargadas con 2026 según el aviso interno; actualízalas cada año). El Autocompletar mira la fecha de cada día y aplica el turno de la temporada que toca.</p>
+</article>
+<article class="paso">
+<h3>Cambio de cuadro (cada ~2 años)</h3>
+<p>Cuando te dan turno nuevo, pulsa '+ Cambio' en la sección de Cuadro, elige la fecha desde la que aplica y configura sus temporadas. El Autocompletar usará el cuadro antiguo antes de esa fecha y el nuevo a partir de ella. Puedes tener varios.</p>
+</article>
+<article class="paso">
+<h3>Turno partido en Fijo de Línea</h3>
+<p>Dentro de cada plantilla de turno puedes activar el toggle 'T. Partido'. Al hacerlo aparecen los campos del segundo servicio (inicio y fin) y el lugar de inicio del 2º servicio. Al Autocompletar, los días se rellenan automáticamente como turno partido con todas las horas y lugares.</p>
+</article>
+<article class="paso">
+<h3>Lugares de inicio y fin</h3>
+<p>Cada plantilla de turno incluye campos para el lugar de inicio, el lugar de fin del primer servicio y, en turno partido, el lugar de inicio del segundo servicio. El Autocompletar los traslada a cada día del mes.</p>
+</article>
+<article class="paso">
+<h3>Fecha de ingreso y antigüedad</h3>
+<p>Introduce tu fecha de entrada en EMT en formato dd/mm/aaaa (las barras se añaden solas al escribir). La app calcula y muestra tu antigüedad en años. Esta fecha se usa para el banner de aniversario en Inicio y para el cálculo de pesos de vacaciones cuando llevas menos de 4 años en la empresa.</p>
+</article>
+<article class="paso">
+<h3>Notas de perfil</h3>
+<p>Campo libre para apuntar información adicional sobre tu puesto o condiciones.</p>
+</article>
+</div></details>
+<details class="sec n1" id="opciones">
+<summary>Opciones</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Recordatorio de turno</h3>
+<p>Activa un aviso diario a la hora que elijas para recordarte consultar tu turno del día siguiente. Configura la hora en el selector.</p>
+</article>
+<article class="paso">
+<h3>Aviso L06</h3>
+<p>La app puede avisarte cuando estés próximo a generar un nuevo día L06. Actívalo o desactívalo desde esta sección.</p>
+</article>
+<article class="paso">
+<h3>Recordatorio solicitud día libre</h3>
+<p>Programa una notificación para que te avise el día que necesitas solicitar un libre específico. Indica la fecha y la hora del recordatorio.</p>
+</article>
+<article class="paso">
+<h3>Pantalla de inicio</h3>
+<p>Elige qué pantalla se abre al arrancar la app: Agenda, Inicio, Calendario, Perfil o Estadísticas.</p>
+</article>
+<article class="paso">
+<h3>Portal del empleado</h3>
+<p>Guarda tus credenciales del Portal del empleado para acceder rápidamente desde la app. Los datos se almacenan solo en tu dispositivo.</p>
+</article>
+<article class="paso">
+<h3>Almacenamiento de fotos</h3>
+<p>Muestra el total de fotos guardadas (cambios + documentos) y el espacio que ocupan. Pulsa 'Fotos de cambios y documentos' para ir directamente a la pantalla Documentos. Si hay fotos guardadas, aparece el botón 'Borrar todas las fotos' para liberar espacio de una sola vez (pide confirmación).</p>
+</article>
+<article class="paso">
+<h3>Copia de seguridad</h3>
+<p>Exporta todos tus datos en un archivo ZIP que incluye la información de turnos, vacaciones, cambios y configuración, junto con todas las fotos de cambios y documentos. El archivo se guarda en la carpeta Descargas. Al importar, la app detecta automáticamente si es un backup ZIP (nuevo) o un JSON antiguo y restaura todo correctamente.</p>
+</article>
+<article class="paso">
+<h3>Backup automático en Google Drive</h3>
+<p>La app realiza automáticamente una copia de seguridad en tu Google Drive. Si desinstalar y vuelves a instalar la app, los datos se restauran solos al abrirla por primera vez. No necesitas hacer nada: funciona de forma transparente siempre que tengas la cuenta de Google sincronizada.</p>
+</article>
+<article class="paso">
+<h3>Backup local diario</h3>
+<p>Además del backup en Drive, la app guarda automáticamente un archivo JSON una vez al día en 'Descargas → AgendaEMT → agendaemt_backup_FECHA.json'. Mantiene las 3 copias más recientes (una por día) y borra las más antiguas, así tienes historial sin llenar el móvil. Como están en la carpeta Descargas pública, sobreviven aunque desinstales la app, y puedes recuperar tus datos desde 'Importar datos' después de una reinstalación.</p>
+</article>
+<article class="paso">
+<h3>Libranzas manuales del cuadrante</h3>
+<p>Si el grupo de libres del cuadrante no coincide con tu libranza real, puedes introducir manualmente los días libres de cada mes.</p>
+</article>
+<article class="paso">
+<h3>Borrar todos los datos</h3>
+<p>Elimina permanentemente toda la información de la app. Úsalo solo si quieres empezar desde cero.</p>
+</article>
+</div></details>
+<details class="sec n1" id="widget-de-pantalla-de-inicio">
+<summary>Widget de pantalla de inicio</summary>
+<div class="dentro">
+<article class="paso">
+<h3>¿Qué muestra el widget?</h3>
+<p>Un resumen compacto cuadrado (2×2 celdas) con el turno de hoy y de mañana, la fecha actual, el tipo de turno con su color, y el tiempo de Madrid (emoji + temperatura actual + máxima y mínima del día). Los días sin turno registrado muestran 'Libre' en verde.</p>
+</article>
+<article class="paso">
+<h3>Fondo con autobús EMT</h3>
+<p>El widget tiene un fondo azul claro con la silueta del autobús EMT de forma semitransparente. En modo oscuro el fondo cambia a azul marino para adaptarse al tema del sistema.</p>
+</article>
+<article class="paso">
+<h3>Añadir el widget</h3>
+<p>Mantén pulsado el escritorio de Android → Widgets → busca AgendaBus. Colócalo donde quieras. El widget tiene esquinas redondeadas como los widgets del reloj y el tiempo.</p>
+</article>
+<article class="paso">
+<h3>Actualizar</h3>
+<p>El widget se actualiza automáticamente cada 30 minutos. También puedes forzar la actualización pulsando el icono de recarga que aparece en la esquina superior derecha del widget.</p>
+</article>
+<article class="paso">
+<h3>Abrir la app</h3>
+<p>Pulsa en cualquier parte del widget (excepto el botón de recarga) para abrir directamente la pantalla principal de AgendaBus.</p>
+</article>
+</div></details>
+<details class="sec n1" id="exportar-calendario-a-pdf">
+<summary>Exportar calendario a PDF</summary>
+<div class="dentro">
+<article class="paso">
+<h3>¿Desde dónde se exporta?</h3>
+<p>La exportación está disponible en la pantalla Calendario. Busca el botón con el icono de PDF en la barra superior.</p>
+</article>
+<article class="paso">
+<h3>PDF mensual</h3>
+<p>Genera un PDF con el calendario del mes seleccionado, mostrando todos los días con su tipo de turno, horario, línea y código. Los domingos y festivos aparecen en rojo.</p>
+</article>
+<article class="paso">
+<h3>PDF anual</h3>
+<p>Genera una vista compacta de todo el año con los 12 meses en una sola página. Ideal para tener una visión general del año laboral.</p>
+</article>
+<article class="paso">
+<h3>Guardar o compartir</h3>
+<p>Una vez generado el PDF, puedes guardarlo en tu dispositivo o compartirlo directamente por WhatsApp, email u otras apps.</p>
+</article>
+</div></details>
+<details class="sec n1" id="festivos-2026">
+<summary>Festivos 2026</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Calcular festivos</h3>
+<p>La pantalla Festivos muestra todos los festivos del año y calcula automáticamente si te generan L04, L05 o si tienes que trabajarlos, comparándolos con tu grupo de libres y tus vacaciones registradas.</p>
+</article>
+<article class="paso">
+<h3>L04 — Festivo en libranza</h3>
+<p>Si el festivo cae en un día que ya tienes libre según tu cuadrante, se genera un L04 (día libre compensatorio).</p>
+</article>
+<article class="paso">
+<h3>L05 — Festivo en vacaciones</h3>
+<p>Si el festivo cae dentro de un periodo de vacaciones que tienes registrado, se genera un L05. Para que funcione, debes tener las vacaciones añadidas en la pantalla Vacaciones antes de pulsar 'Aplicar'.</p>
+</article>
+<article class="paso">
+<h3>Sábados festivos</h3>
+<p>Si el festivo cae en sábado se marca como 'Trabajo' (los sábados se trabajan en el convenio EMT aunque sean festivos).</p>
+</article>
+<article class="paso">
+<h3>Aplicar festivos</h3>
+<p>Pulsa 'Tengo los festivos anuales' para que la app escriba automáticamente los resultados en la Agenda. Puedes volver a pulsarlo si cambias las vacaciones o corriges algún festivo — primero borra manualmente los días incorrectos.</p>
+</article>
+</div></details>
+<details class="sec n1" id="mis-recordatorios">
+<summary>Mis recordatorios</summary>
+<div class="dentro">
+<article class="paso">
+<h3>¿Qué son?</h3>
+<p>Lista de todos los avisos automáticos que has programado para recordarte solicitar días libres en el portal del empleado. Se crean desde el diálogo de restricción de petición en Estadísticas.</p>
+</article>
+<article class="paso">
+<h3>Dónde encontrarlos</h3>
+<p>Más → Mis datos → Recordatorios.</p>
+</article>
+<article class="paso">
+<h3>Qué muestra cada tarjeta</h3>
+<p>El día que quieres librar y la fecha y hora del aviso programado. La notificación te indicará exactamente qué día tienes que solicitar.</p>
+</article>
+<article class="paso">
+<h3>Modificar la hora del aviso</h3>
+<p>Pulsa sobre la tarjeta del recordatorio para abrir el selector de hora y cambiarla. La alarma se cancela y se reprograma automáticamente.</p>
+</article>
+<article class="paso">
+<h3>Eliminar un recordatorio</h3>
+<p>Pulsa el icono de papelera 🗑 en la tarjeta. La app pedirá confirmación antes de cancelar el aviso y borrarlo de la lista.</p>
+</article>
+<article class="paso">
+<h3>Limpieza automática</h3>
+<p>Cuando el aviso se dispara, el recordatorio se elimina solo de la lista. No hace falta borrarlo manualmente una vez que te ha notificado.</p>
+</article>
+</div></details>
+<details class="sec n1" id="pasatiempos">
+<summary>Pasatiempos</summary>
+<div class="dentro">
+<article class="paso">
+<h3>¿Cómo acceder?</h3>
+<p>En Más → Ayuda y extras → Juegos. Elige entre los tres juegos disponibles.</p>
+</article>
+<article class="paso">
+<h3>Bus Game 🚌</h3>
+<p>El clásico Snake con el autobús EMT. Guía el bus azul para recoger guisantes verdes. La velocidad (1-5) se ajusta en partida. Tu récord se guarda automáticamente.</p>
+</article>
+<article class="paso">
+<h3>Sopa de Letras 🔤</h3>
+<p>10 niveles temáticos con vocabulario EMT: tipos de turno, vehículos, cocheras de Madrid, convenio, festivos y más. Arrastra el dedo por las letras para seleccionar la palabra — horizontal o vertical. Las palabras encontradas se marcan con colores distintos.</p>
+</article>
+<article class="paso">
+<h3>Bubble Shooter 🫧</h3>
+<p>Dispara burbujas de colores para hacer grupos de 3 o más del mismo color y hacerlos explotar. Mantén el dedo pulsado para apuntar — la línea de puntos muestra la trayectoria con rebotes en las paredes. Suelta para disparar. Las burbujas que quedan flotando (sin contacto con la fila superior) también caen y dan puntos extra.</p>
+</article>
+</div></details>
+<details class="sec n1" id="actualizaciones">
+<summary>Actualizaciones 📋</summary>
+<div class="dentro">
+<details class="sec n2" id="novedades-v1-65">
+<summary>Novedades v1.65 ✨</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Maternidad y paternidad</h3>
+<p>Nueva situación en el tipo de día. Se cobra el 100 % de la base reguladora y está EXENTA de IRPF, así que el neto sube respecto a una baja normal. La nómina y la previsión del mes ya lo tienen en cuenta.</p>
+</article>
+<article class="paso">
+<h3>Bajas de varios días de golpe</h3>
+<p>Ya no hay que ir marcando día a día: eliges «desde» y «hasta» y la baja se aplica a todo el rango. Una maternidad de 16 semanas se mete en dos toques.</p>
+<p>Lo tienes a mano desde Calendario, Agenda e Inicio.</p>
+</article>
+<article class="paso">
+<h3>La Seguridad Social se calcula sola</h3>
+<p>En vez de meter un importe fijo a mano, se calcula con la base de cotización del mes por el tipo obrero. En la previsión se estima como porcentaje del bruto.</p>
+</article>
+<article class="paso">
+<h3>Trabajo voluntario en libranza</h3>
+<p>Los días que trabajas voluntariamente tu libranza (L26/LEE) ya no devengan prima de actividad, agente único ni CIPRA diario, como en la nómina real. Lo que cobras por ese día no cambia.</p>
+</article>
+<article class="paso">
+<h3>Previsión del mes más fina</h3>
+<p>Ahora incluye las vacaciones y su prima, y admite días sin retribuir, permisos y bajas. Distingue la baja común (60 %) de la laboral (100 %), y los partidos y las nocturnas se escalan a los días que de verdad trabajas.</p>
+</article>
+<article class="paso">
+<h3>Festivos bien pintados en el calendario</h3>
+<p>Un festivo que libras sale como festivo librado (azul con reborde rojo) y uno que trabajas por cambio o forzoso sale como festivo trabajado (rojo).</p>
+</article>
+<article class="paso">
+<h3>Introducir el perfil paso a paso</h3>
+<p>En Perfil hay tres botones. «Introducir perfil» te lo pregunta todo de uno en uno —empleado, fechas, cochera, servicio, grupo, tipo de conductor— y solo saca lo que te toca: los voluntarios solo al correturnos de mañana o tarde, y los turnos de temporada solo a quien lleva reparto propio. Empieza con lo que ya tengas puesto y se guarda en cada paso, así que puedes dejarlo a medias. «Modificar perfil» es la pantalla de siempre, con todo a la vista. Y «Borrar perfil» te pregunta antes si quieres vaciar solo tus datos o también la agenda.</p>
+</article>
+<article class="paso">
+<h3>Los turnos con X</h3>
+<p>En el cuadro, un turno con una X al lado del número es de los que la empresa puede suprimir si falta gente. En la agenda salen con una marca «❌ Lleva X» para que los tengas fichados. Si eres correturnos de línea no tienes que hacer nada: la X viene en el PDF del reparto y se lee sola. Si eres fijo de línea la marcas en tu perfil, en el turno de cada tipo de día —hay repartos que entre semana no la llevan y el sábado o el festivo sí—. Y un día suelto puedes marcarlo o quitarlo desde el propio día.</p>
+</article>
+<article class="paso">
+<h3>Correturnos de línea: los papeles del portal</h3>
+<p>Si eres correturnos de línea, el asistente no te pide los turnos a mano: te explica de dónde sacarlos. Entra en el portal, busca en Empleado → Cuadros de servicio, elige tu línea y la temporada, y bájate primero el PLAN DE TRABAJO y después los turnos de laborables, sábados y festivos. En esa misma pantalla tienes un botón «Ver tutorial» con el vídeo. El plan se sube una sola vez —la rejilla de semanas es la misma todo el año— y los turnos van temporada por temporada.</p>
+</article>
+<article class="paso">
+<h3>Los sábados y festivos que no tienes turno</h3>
+<p>En el paso de turnos de cada temporada, encima del sábado y del domingo/festivo hay un «No tengo turno»: lo marcas y ese día se queda en blanco. Y abajo, «Saltar esta temporada» pasa a la siguiente sin rellenarla.</p>
+</article>
+<article class="paso">
+<h3>Correturnos: la mañana hasta las 13:00</h3>
+<p>Al detectar el cambio de prestación, la mañana llega hasta las 13:00 (antes se cortaba a las 12:00).</p>
+</article>
+<article class="paso">
+<h3>Arreglos</h3>
+<p>Traer la copia del iPhone ya funciona: en la versión anterior no llegaba a importar nada y no avisaba de ello. Por el mismo motivo se protegen los cambios de bus, tus contactos, los festivos editados y el histórico, que podían perderse al actualizar.</p>
+<p>Además: al borrar un cambio de libre o de empresa se restaura el turno que había antes, y se añade el código CL01 (cambio de día libre) a la lista de referencia.</p>
+</article>
+</div></details>
+<details class="sec n2" id="novedades-v1-61">
+<summary>Novedades v1.61 🛡️</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Tus datos ya no se pueden perder al abrir la app</h3>
+<p>Si al arrancar la app no conseguía leer lo guardado, se abría con la agenda en blanco y al primer cambio escribía ese vacío encima: se perdían todos los turnos sin avisar.</p>
+<p>Ahora la app distingue «no hay datos» (primer uso) de «hay datos y no se pueden leer». En el segundo caso NO guarda nada, así lo que tienes en el móvil sigue intacto, y te avisa con un mensaje explicando que no se ha borrado nada y cómo restaurar la copia.</p>
+<p>Recuerda: la app te guarda una copia automática cada día en Descargas/AgendaEMT (las 3 últimas). Si algo va mal, restáurala desde Opciones → Restaurar copia de seguridad.</p>
+</article>
+</div></details>
+<details class="sec n2" id="novedades-v1-60">
+<summary>Novedades v1.60 ✨</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Partes de la jornada</h3>
+<p>En el editor de turno, tres botones: Colisión (+10 min), Lesionado (+10 min) y Aclaraciones (+15 min). Esos minutos suman a tu acumulado para el L06 (en Estadísticas), no a las horas extra ni a los minutos semanales. Ojo: el convenio abona 4 partes de colisión o lesionados al año; del quinto en adelante puedes apuntarlo, pero ya no suma. Las aclaraciones no tienen tope.</p>
+</article>
+<article class="paso">
+<h3>Relevo con hora</h3>
+<p>El relevo (cuando te cambian de bus a media jornada) admite teclado normal y puedes apuntar la hora a la que te cambian.</p>
+</article>
+<article class="paso">
+<h3>Festivos editables</h3>
+<p>En Festivos puedes ajustar tus 14 festivos de cada año a mano. Se calculan solos (con la Semana Santa ya correcta para 2027), pero cada uno puede editarse por si tu calendario es distinto.</p>
+</article>
+<article class="paso">
+<h3>Nº de inspector SAE con letras</h3>
+<p>El campo del nº de inspector SAE admite letras y números.</p>
+</article>
+<article class="paso">
+<h3>Teléfonos y contactos propios</h3>
+<p>En Teléfonos quedan solo los números públicos; los demás los añades tú como contactos propios, y puedes compartir e importar tu lista (fichero) con compañeros.</p>
+</article>
+<article class="paso">
+<h3>Retribuciones: L12, L25 y LEE</h3>
+<p>Añadidos los códigos de día L12, L25 y LEE a las tablas salariales.</p>
+</article>
+<article class="paso">
+<h3>Avisos más limpios</h3>
+<p>En «Tus avisos» de Inicio, los eventos que ya han pasado hoy desaparecen (en el calendario siguen apareciendo).</p>
+</article>
+<article class="paso">
+<h3>Agenda más clara</h3>
+<p>Las etiquetas de cada día (minutos, nocturnas, descanso…) se ven sin recuadro de fondo y con colores más legibles en modo claro.</p>
+</article>
+<article class="paso">
+<h3>Aviso de nº de bus en turnos búho</h3>
+<p>El aviso de apuntar el nº de bus ya salta el día correcto en los turnos de búho que empiezan de madrugada (antes se adelantaba un día).</p>
+</article>
+<article class="paso">
+<h3>Traer datos desde el iPhone</h3>
+<p>Si tenías la app en un iPhone, ahora puedes traer tus datos y fotos a Android: al abrir su copia de seguridad, se restaura aquí.</p>
+</article>
+</div></details>
+<details class="sec n2" id="novedades-v1-59">
+<summary>Novedades v1.59 ✨</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Copia de seguridad automática con fotos</h3>
+<p>La copia diaria ahora es un ZIP con tus datos Y las fotos (papeletas, nóminas). En Opciones puedes elegir la carpeta de copias —incluida una de Google Drive/OneDrive para que se suba sola— o usar «Guardar copia en la nube» para enviarla a Drive. Se conservan las 3 últimas.</p>
+</article>
+<article class="paso">
+<h3>Botón Deshacer</h3>
+<p>Tras una acción gorda (autocompletar pisando, borrar un cambio, importar del portal) sale abajo un «Deshacer» durante 10 segundos. Si te equivocas, un toque y vuelve todo atrás.</p>
+</article>
+<article class="paso">
+<h3>Resumen anual de retribuciones</h3>
+<p>En Retribuciones, botón 📊 arriba: total ganado del año y neto estimado, barras de bruto por mes (tócalas para ir a ese mes) y el desglose de pluses por tipo. Cuadra exacto con la suma de los meses.</p>
+</article>
+<article class="paso">
+<h3>Aviso cuando generas un día</h3>
+<p>El día que se genera un día compensatorio (L04, L05, L15, L25, L30, LNV…) te avisa: con un mensaje al abrir la app y con una notificación a las 00:01, aunque no la abras.</p>
+</article>
+<article class="paso">
+<h3>Histórico de cambios</h3>
+<p>En Cambios, «Histórico de cambios»: el registro de qué cambiaste y con quién queda guardado aunque borres la papeleta. Así no pierdes la cuenta de tus cambios.</p>
+</article>
+<article class="paso">
+<h3>Seguro médico en la nómina</h3>
+<p>En las deducciones de Retribuciones puedes meter tu seguro médico (editable, porque no todos valen lo mismo); se resta para estimar el neto.</p>
+</article>
+<article class="paso">
+<h3>Arreglo del refuerzo nocturno</h3>
+<p>Los turnos de búho que empiezan de madrugada (p. ej. el «del día 3» que arranca a las 00:03) ya calculan bien la cuenta atrás de la próxima entrada.</p>
+</article>
+</div></details>
+<details class="sec n2" id="novedades-v1-58">
+<summary>Novedades v1.58 ✨</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Verano por decenas</h3>
+<p>La temporada de verano se parte en 3 decenas (1-11, 12-21 y 22 ago-1 sep), como publica EMT. Fijos y correturnos de línea pueden poner turno distinto (o sin turno) en cada decena, en el perfil. Si ya tenías el verano configurado, se migra solo.</p>
+</article>
+<article class="paso">
+<h3>Días generados: previstos</h3>
+<p>Días generados se divide en dos: los ya generados (gastables) y «🔮 Previstos · si todo sigue igual» — los que generarás con tu agenda actual (L06 futuros, festivos…), con cuenta atrás. Pasan arriba solos cuando llega su fecha. Así, si cambias un turno o un festivo, no se te queda un día «dado» que ya no cuadra.</p>
+</article>
+<article class="paso">
+<h3>Más días automáticos</h3>
+<p>L15 al trabajar un festivo (con su «¡L15 al saco!» en la agenda, aunque el día venga del autocompletar), L04/L05 de festivos en libranza o vacaciones (sin tener que aplicarlos), y L25/L30 al cumplir 25/30 años en la EMT (por tu fecha de ingreso).</p>
+</article>
+<article class="paso">
+<h3>Festivos anuales con interruptor</h3>
+<p>El botón de festivos anuales ahora es un interruptor: enciéndelo para pedirlos todos (menos los que caen en sábado) y apágalo para quitarlos de la agenda. Reversible.</p>
+</article>
+<article class="paso">
+<h3>L26/LEE ya no acumula minutos</h3>
+<p>Trabajar tu libranza es voluntario: ni el exceso del turno ni el descanso reducido de ese día suman para el L06 (en la agenda verás «+Xmin (no suma)»). Lo que cobras ese día no cambia.</p>
+</article>
+<article class="paso">
+<h3>Añade líneas a las cocheras</h3>
+<p>En Cocheras, botón «Añadir línea a una cochera»: eliges cochera y línea, y queda guardada (cuenta para traslados y forzosas). Toca una línea añadida para quitarla. Así no hay que esperar actualización cuando EMT crea o mueve líneas.</p>
+</article>
+<article class="paso">
+<h3>Planear cambio y pedir días</h3>
+<p>En «Planear un cambio», leyenda más clara: 🔵 tus libranzas (le ofreces) y 🟠 las del compañero (te puede dar); ya no salen sus vacaciones ni días pedidos con generados (los dos tenéis que tener esta versión). Y en «Pedir días», interruptor «o días de mi grupo» para ofrecer tu grupo además de días concretos.</p>
+</article>
+<article class="paso">
+<h3>Widget</h3>
+<p>Los partidos muestran también la 2ª prestación (horas y lugares).</p>
+</article>
+</div></details>
+<details class="sec n2" id="novedades-v1-57">
+<summary>Novedades v1.57 ✨</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Planear un cambio con un compañero</h3>
+<p>En Calendario, sección «🔁 Planear un cambio»: compartes tu calendario y le pides el suyo (los dos con AgendaBus). Al importarlo ves los días intercambiables: en azul los que ÉL libra y tú trabajas (te puede cubrir → se los pides) y en naranja los que TÚ libras y él trabaja (se los devuelves). Botón «Enviar PDF» para mandárselo y que él valore y acepte el cambio. También funciona abriendo su archivo desde WhatsApp (selector Coincidencias / Planear cambio). No salen vacaciones ni días pedidos con generados; sí salen los que ya libras por un cambio anterior.</p>
+</article>
+<article class="paso">
+<h3>Todos los códigos de libre</h3>
+<p>Al marcar un día libre puedes elegir cualquier código del convenio (L01, L02, L03, L04, L05, L06, L09, L10, L11, L12, L14, L15, L18, L19, L25, L26, L30, LC1, LRJ, CL01) y debajo te sale su descripción. También están todos en «Apuntar día generado» y se detectan al importar del portal.</p>
+</article>
+<article class="paso">
+<h3>Pedir días: el día a cambio es opcional</h3>
+<p>Al pedir días a compañeros ya no hace falta marcar el día que ofreces: si lo dejas vacío, puedes enviar igual y en la imagen pone «Por días del [tu grupo]» para que el compañero elija.</p>
+</article>
+<article class="paso">
+<h3>Donaciones por Bizum</h3>
+<p>En «Apoya AgendaBus» ya puedes invitar a un café por Bizum, además de PayPal, con botón de copiar el número.</p>
+</article>
+<article class="paso">
+<h3>Etiquetas de turno más claras</h3>
+<p>En la agenda, junto a la línea sale el código de turno (T.NN). El partido mixto se marca «TPM» (mañana que acaba después de 16:30, salvo domingo/festivo), el búho «BH» y la reserva nocturna «RN» (turnos que empiezan a partir de las 22:00).</p>
+</article>
+<article class="paso">
+<h3>Total acumulado en domingos</h3>
+<p>Cada domingo, junto a los minutos de la semana, se ve el total que llevas acumulado hacia el próximo L06 (⏳ Total).</p>
+</article>
+<article class="paso">
+<h3>Plazo para anular días pedidos</h3>
+<p>En Recordatorios, sección «Días pedidos · plazo de anulación»: la app lleva la cuenta atrás de hasta cuándo puedes anular cada día que has pedido y te avisa cuando se acerca el límite (puedes elegir con cuántos días de antelación quiere el aviso en Notificaciones). Cuando pasa el plazo, se marca que ya no se puede anular.</p>
+</article>
+<article class="paso">
+<h3>Estadísticas del año (modo friki)</h3>
+<p>En Estadísticas, tarjeta con los totales del año: viajes que haces / completas / pierdes, largas, cortas, viajeros, recaudación y veces sin repostar.</p>
+</article>
+<article class="paso">
+<h3>Premio a la seguridad</h3>
+<p>El contador del premio a la seguridad cuenta las prestaciones según el convenio (art. 7.11): ya no cuenta las vacaciones y sí los días que no apuntas, con un ajuste manual para los días de juicio.</p>
+</article>
+<article class="paso">
+<h3>Widget: días aún sin turno</h3>
+<p>El widget distingue un día de trabajo del que todavía no has metido el turno (sale «Sin turno aún» con una raya gris) de una libranza.</p>
+</article>
+<article class="paso">
+<h3>Icono y pantalla de inicio nuevos</h3>
+<p>AgendaBus estrena icono y pantalla de carga propios.</p>
+</article>
+<article class="paso">
+<h3>Arreglos</h3>
+<p>El «L06 al saco» ya no se duplica en domingo; el cambio de turno vuelca también los lugares al turno y, al borrarlo, recupera el turno que tenías; y la guardia ya permite poner lugar de fin.</p>
+</article>
+</div></details>
+<details class="sec n2" id="novedades-v1-56">
+<summary>Novedades v1.56 ✨</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Líneas universitarias</h3>
+<p>Nuevo servicio «Univ.» en el perfil: elige tu grupo (1-20) para tus libranzas (findes siempre libres + 2 días entre semana que rotan) y tu línea (A-U). Pulsa «Cargar temporadas» y rellena tus 2 turnos (Invierno y Baja, de lunes a viernes). En el «no lectivo» de verano la línea cierra y esos días los metes a mano como correturnos.</p>
+</article>
+<article class="paso">
+<h3>Complemento vehículo articulado</h3>
+<p>En Editar turno, junto al Nº Bus, marca «🚍 Articulado» los días que cojas un articulado. Suma 4,80 € por día en Retribuciones (Pluses y cobros).</p>
+</article>
+<article class="paso">
+<h3>Guardias al importar</h3>
+<p>Al importar un turno del portal sin línea y de 7h15, la app lo marca solo como Guardia (no se confunde con los aumentos, que llevan un trozo de línea).</p>
+</article>
+<article class="paso">
+<h3>Trabajar tu libranza (L26/LEE)</h3>
+<p>Cuando sales en tu libranza y marcas «L26/LEE al saco», el día cuenta como trabajado (ya no aparece como «libras») y suma en Retribuciones, además de generarte el L26/LEE.</p>
+</article>
+<article class="paso">
+<h3>Nocturnas y partidos en Pluses y cobros</h3>
+<p>Las horas nocturnas y los partidos ahora aparecen como líneas dentro de «Pluses y cobros». Además, la nocturnidad del mes se redondea turno a turno (no el total), como marca el convenio.</p>
+</article>
+<article class="paso">
+<h3>Widget al día</h3>
+<p>El widget cambia de día solo al pasar de medianoche.</p>
+</article>
+<article class="paso">
+<h3>Arreglos</h3>
+<p>El «L26 al saco» ya no se duplica y los turnos partidos se ven bien alineados en el perfil.</p>
+</article>
+</div></details>
+<details class="sec n2" id="novedades-v1-55">
+<summary>Novedades v1.55 ✨</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Importar días del portal</h3>
+<p>En Días generados, botón «Importar del portal». Reenvíate por correo desde el portal «Días libres acumulados», cópialo entero y pégalo: la app mete de golpe los que ponen «Disponible» (tipo y fecha). Ideal si tienes muchos acumulados. No duplica los que ya tengas (mismo tipo y fecha) y, al re-pegar el correo, sincroniza la lista.</p>
+</article>
+<article class="paso">
+<h3>Días de convenio automáticos</h3>
+<p>Si no importas del portal, la app genera sola cada 1 de enero los libres fijos del convenio: 3 LC1 al año y los LRJ que tocan (4 en 2026, 3 a partir de 2027). En cuanto importas del portal una vez, la app deja de generarlos: manda el portal.</p>
+</article>
+<article class="paso">
+<h3>Widget de la semana</h3>
+<p>El widget ya se puede estirar: pequeño te enseña hoy y mañana, y si lo haces más alto va mostrando más días hasta la semana entera (7 días). Mantén pulsado el widget y arrastra los puntos de las esquinas.</p>
+</article>
+<article class="paso">
+<h3>Horas nocturnas (regla 2025)</h3>
+<p>Nueva forma de contar la nocturnidad: tras las horas completas, de 6 a 35 minutos cuentan media hora y a partir de 36 una hora entera. Ejemplo: acabar a las 01:06 son 3,5 horas.</p>
+</article>
+<article class="paso">
+<h3>Retribuciones en vacaciones</h3>
+<p>En el mes que estés de vacaciones, la prima de actividad, el agente único y el CIPRA diario se cobran por los días que trabajarías ese mes (no solo los que pisas), como marca el convenio.</p>
+</article>
+<article class="paso">
+<h3>Cambio de prestación a mano</h3>
+<p>Los fijos de línea y correturnos de línea tienen en Editar turno un interruptor para marcar que ese día hiciste un cambio de prestación; suma en Retribuciones. Los correturnos de mañana/tarde lo siguen detectando solos.</p>
+</article>
+<article class="paso">
+<h3>L06 librado</h3>
+<p>Cuando libras un L06, ese día se cobra como trabajado: suma un día de prima de actividad, agente único y CIPRA diario en su mes.</p>
+</article>
+<article class="paso">
+<h3>Avisos de la app</h3>
+<p>Cuando hay versión nueva o algún comunicado, te sale una ventana al abrir la app. En Android, además, la app lo mira una vez al día en segundo plano y te suelta una notificación aunque no la abras. En iPhone no se puede: iOS no deja que una app se despierte cuando quiera, así que allí lo verás al abrirla.</p>
+</article>
+<article class="paso">
+<h3>LRJ: se libra, pero se cobra</h3>
+<p>El libre de la reducción por jubilación parcial es día prestado para el convenio. Aunque lo libres, suma prima de actividad, agente único y CIPRA diario en su mes, y cuenta como prestación para el premio a la seguridad en la conducción.</p>
+</article>
+<article class="paso">
+<h3>El autocompletar respeta las vacaciones</h3>
+<p>Al autocompletar la agenda con «pisar todo», los días de vacaciones ya no se borran: van por encima de todo.</p>
+</article>
+<article class="paso">
+<h3>Arreglos</h3>
+<p>Los días generados manuales repetidos (varios del mismo tipo y fecha) ya se libran y cobran por separado, y volver a cobrar un día manual suma bien en Retribuciones.</p>
+</article>
+</div></details>
+<details class="sec n2" id="novedades-v1-52">
+<summary>Novedades v1.52 ✨</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Meter vacaciones con calendario</h3>
+<p>Al añadir un periodo de vacaciones se abre un calendario: tocas el día de inicio y el de fin y se tiñe todo el rango (aunque cruce de un mes a otro). Mucho más visual.</p>
+</article>
+<article class="paso">
+<h3>Vacaciones por año (2026 / 2027)</h3>
+<p>Arriba de Vacaciones tienes un selector de año. Cada año lleva sus propios periodos y contadores (21 verano / 9 invierno), así que ya puedes meter las del año siguiente sin que se mezclen con las de este.</p>
+</article>
+<article class="paso">
+<h3>Aviso de L03 por vacaciones</h3>
+<p>Si dentro de tus vacaciones libras más de 8 días, a partir del 9º cada día genera un L03. La app lo cuenta solo —sumando libranzas del cuadrante, manuales y libres por cambio con compañeros— y te avisa de cuántos generas y cuándo te los conceden (el día después de tus últimas vacaciones).</p>
+</article>
+<article class="paso">
+<h3>Cálculo de pesos por año</h3>
+<p>La previsión de la bola de vacaciones usa los 4 años hasta el año que estés mirando (en 2027, de 2024 a 2027).</p>
+</article>
+</div></details>
+<details class="sec n2" id="novedades-v1-51">
+<summary>Novedades v1.51 ✨</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Compartir un evento de Mi Agenda</h3>
+<p>En cada evento hay un botón de compartir: se lo mandas a un compañero por WhatsApp y, al abrirlo con «Abrir con AgendaBus», se le añade a SU agenda con tu icono, color, hora y aviso.</p>
+</article>
+<article class="paso">
+<h3>Icono de barbacoa 🥩</h3>
+<p>Nuevo icono para los eventos de Mi Agenda.</p>
+</article>
+<article class="paso">
+<h3>Recorrido del turno deslizante</h3>
+<p>En Inicio, si el recorrido del turno o el nombre de la cochera son largos, ahora se deslizan solos en la tarjeta de salidas para que se lean enteros.</p>
+</article>
+<article class="paso">
+<h3>Copias de seguridad limitadas a 3</h3>
+<p>Las copias manuales (ZIP con fotos) ya no se acumulan sin fin: se guardan solo las 3 más recientes.</p>
+</article>
+</div></details>
+<details class="sec n2" id="novedades-v1-50">
+<summary>Novedades v1.50 ✨</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Mi Agenda personal</h3>
+<p>Nueva pantalla (Agenda › Mi Agenda) para tus cosas personales: eventos con icono, color, estilo (relleno/reborde/punto) y aviso con la antelación que quieras. Está sincronizada con tus libranzas, vacaciones y festivos del trabajo, tiene vista de mes y de año, y se exporta a PDF.</p>
+</article>
+<article class="paso">
+<h3>Mi Agenda: pegar y ordenar</h3>
+<p>Copia un evento (📋) y ve tocando días para repetirlo sin escribirlo de nuevo. Arrastra los eventos de un día por el asa para ordenarlos: el de arriba es el que se ve en el calendario. Si hay dos eventos el mismo día, el recuadro se parte a dos colores.</p>
+</article>
+<article class="paso">
+<h3>Horas extra</h3>
+<p>En Editar turno puedes apuntar las horas extra (el exceso de jornada). La app las contabiliza según convenio (de 11 a 40 min → media hora; a partir de 41 → una hora entera) y las valora con tu antigüedad. Salen en la Agenda y suman en Retribuciones.</p>
+</article>
+<article class="paso">
+<h3>Turnos partidos al detalle</h3>
+<p>La 2ª prestación aparece debajo de la 1ª en la Agenda, la notificación del turno de mañana desglosa las dos partes (horas y cabeceras) y el aviso del nº de bus también salta al empezar la 2ª parte.</p>
+</article>
+<article class="paso">
+<h3>Relevos múltiples y «sin repostar»</h3>
+<p>Si te cambian de bus varias veces, ahora puedes añadir varios buses de relevo por servicio. Y en el modo friki puedes marcar «sin repostar» (sale ⛽ S/R en la Agenda).</p>
+</article>
+<article class="paso">
+<h3>Estadísticas por año</h3>
+<p>Las estadísticas tienen un selector de año: partidos, nocturnas, prestaciones y forzosas son del año elegido (el acumulado de L06 sigue siendo total general). Además, Horas de partido muestra una columna nueva con el nº de partidos.</p>
+</article>
+<article class="paso">
+<h3>Correturnos y copias más fáciles</h3>
+<p>Al elegir tu correturno de línea se rellena solo tu grupo de libres (p.ej. WA4A → 4A). Y «Exportar/Importar datos» se llama ahora «Hacer/Restaurar copia de seguridad»; el backup automático ya no se duplica.</p>
+</article>
+<article class="paso">
+<h3>Coincidir con un compañero</h3>
+<p>En Calendario, comparte tu calendario con un compañero y abre el suyo (toca el archivo en WhatsApp → «Abrir con AgendaBus»): la app te dice los días que libráis los dos a la vez. Puedes exportar el resultado a PDF.</p>
+</article>
+<article class="paso">
+<h3>Vídeo-tutoriales</h3>
+<p>En Más → Ayuda → Tutoriales tienes vídeos cortos que se abren en YouTube para aprender a usar la app paso a paso.</p>
+</article>
+<article class="paso">
+<h3>Avisos de cambios caducados</h3>
+<p>Cuando un cambio con un compañero ya ha pasado, la app te lo recuerda con tres opciones: no recordar más, recordármelo otro día, o borrarlo del registro.</p>
+</article>
+<article class="paso">
+<h3>Más a tu gusto</h3>
+<p>Mi Agenda se puede poner en la barra inferior · el aviso del nº de bus también salta al empezar la 2ª parte del turno partido · el horario de la 2ª parte se ve en la Agenda.</p>
+</article>
+</div></details>
+<details class="sec n2" id="novedades-v1-39">
+<summary>Novedades v1.39 🧭</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Retribuciones con más conceptos</h3>
+<p>La pantalla de Retribuciones (Más › Dinero) calcula ahora también las pagas extra (junio y diciembre), las pagas de marzo y septiembre, el plus de uniformidad, la prima de vacaciones, los pluses especiales de Navidad/Año Nuevo y el premio a la seguridad de conducción (abril). Todo estimado, con selector de mes.</p>
+</article>
+<article class="paso">
+<h3>Nuevos libres: LNV y LEE</h3>
+<p>LNV: por trabajar de noche el 24/31 dic (disfrutar o cobrar). LEE: por trabajar tu libranza en un evento especial (solo cobro, 230 €). Se marcan en el día libre como el L26 y aparecen en Días generados.</p>
+</article>
+<article class="paso">
+<h3>Diseño glow</h3>
+<p>Las tarjetas de toda la app y los botones de Cambios estrenan un estilo con cerco y sombra de color, adaptado a tema claro u oscuro.</p>
+</article>
+<article class="paso">
+<h3>Nueva pantalla «Más»</h3>
+<p>La barra de abajo se queda con lo del día a día (Inicio, Agenda, Calendario, Cambios) y una 5ª pestaña fija, «Más», que reúne TODAS las pantallas ordenadas por categorías: Dinero, Mis datos, Mi empresa y Ayuda y extras. Arriba tiene un buscador para encontrar cualquier pantalla al instante.</p>
+</article>
+<article class="paso">
+<h3>Retribuciones del mes</h3>
+<p>El detalle económico de tu mes (antes en el botón de gráfica del calendario) es ahora una pantalla propia: «Retribuciones», en Más › Dinero. Puedes elegir cualquier mes con las flechas, y sigues teniendo la foto de la nómina.</p>
+</article>
+<article class="paso">
+<h3>«Tablas salariales»</h3>
+<p>La antigua pantalla «Retribuciones» (las tablas de pluses e importes del convenio) pasa a llamarse «Tablas salariales», también en Más › Dinero.</p>
+</article>
+<article class="paso">
+<h3>Barra a tu gusto, con «Más» fija</h3>
+<p>En Opciones eliges las 4 primeras pestañas de la barra y su orden; la 5ª, «Más», es fija y no se puede quitar.</p>
+</article>
+</div></details>
+<details class="sec n2" id="novedades-v1-38">
+<summary>Novedades v1.38</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Tutoriales guiados en la app</h3>
+<p>Tours paso a paso que resaltan cada botón con una explicación, en Inicio, Agenda, Calendario, Cambios, Vacaciones, Perfil, Estadísticas y Opciones. Salen la primera vez y puedes repetirlos con el botón 🎓 de arriba. Además, pantalla de Vídeotutoriales.</p>
+</article>
+<article class="paso">
+<h3>Recordatorios de documentos</h3>
+<p>En 'Mis recordatorios' puedes apuntar la caducidad de tu carnet de conducir, DNI y CAP; la app te avisa 6 meses antes, 3 meses antes, un mes antes y luego cada semana hasta el día que caduca. Las notificaciones (turno, L06, bus) están ahora aquí también.</p>
+</article>
+<article class="paso">
+<h3>Neto estimado del mes</h3>
+<p>En las estadísticas del mes ahora tienes IRPF, cuota sindical, seguridad social y ACE EMT para ver una estimación de tu neto. También el plus de búho del SRN y el cambio forzoso (40/90 €).</p>
+</article>
+<article class="paso">
+<h3>Petición de cambio de días renovada</h3>
+<p>La imagen para pedir días a un compañero tiene un diseño nuevo tipo tarjeta, clara y elegante.</p>
+</article>
+<article class="paso">
+<h3>Menú más despejado</h3>
+<p>'Inicio' en el menú es un desplegable con tus accesos directos (los de la barra inferior). Recordatorios pasa al menú principal y Opciones se puede añadir a la barra de abajo.</p>
+</article>
+<article class="paso">
+<h3>Más cómodo y robusto</h3>
+<p>Fecha de ingreso e inicio SRN se eligen con calendario · correturnos solo en diurno · copias de seguridad y restauración más fiables · arreglos visuales y de rendimiento.</p>
+</article>
+</div></details>
+<details class="sec n2" id="novedades-v1-33">
+<summary>Novedades v1.33</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Turno compartido renovado</h3>
+<p>La imagen para compartir el turno tiene un diseño nuevo tipo tarjeta: día grande, línea y turno, horarios, tiempo partido y los minutos que suman (verde) o restan (rojo). En partido salen las 4 cabeceras (inicio y fin de cada parte).</p>
+</article>
+<article class="paso">
+<h3>Lugar de finalización 2ª parte</h3>
+<p>Los turnos partidos ya tienen el campo del lugar donde acaba la 2ª prestación, y el importador por foto (OCR) lo rellena solo.</p>
+</article>
+<article class="paso">
+<h3>Estimación de sueldo del mes</h3>
+<p>Las estadísticas del calendario calculan tu mes: salario base, antigüedad, primas, agente único, CIPRA, pluses de sábado/domingo, traslado de estación, cambio de prestación, L26 trabajados y días generados cobrados.</p>
+</article>
+<article class="paso">
+<h3>Barra inferior a tu gusto</h3>
+<p>En Opciones puedes elegir qué 5 pantallas aparecen en la barra de abajo y en qué orden.</p>
+</article>
+<article class="paso">
+<h3>Cambios de grupo por fecha</h3>
+<p>En el perfil puedes registrar varios cambios de grupo o de servicio (diurno/búho/SRN) a partir de una fecha; el calendario usa el grupo correcto en cada tramo.</p>
+</article>
+<article class="paso">
+<h3>Copias de seguridad con historial</h3>
+<p>El backup diario guarda ahora las 3 copias más recientes (una por día) y borra las antiguas, en Descargas → AgendaEMT.</p>
+</article>
+<article class="paso">
+<h3>Más ajustes</h3>
+<p>L06 se marca el domingo en que se consigue · 'Libres' cuenta libranzas reales + vacaciones · recordatorios de días unificados en 'Mis recordatorios' · arreglos varios.</p>
+</article>
+</div></details>
+<details class="sec n2" id="novedades-v1-30">
+<summary>Novedades v1.30</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Estadísticas del mes con tu sueldo estimado</h3>
+<p>Las estadísticas del calendario calculan ahora una estimación del mes: salario base, antigüedad, prima de actividad, agente único, quebranto, turnicidad y CIPRA (mensual + diario), más los pluses y cobros (sábados, domingos/festivos, L26 trabajados a 80 €, y días generados cobrados que solo suman en su mes: L06/L26 a 137,67 € y el resto a 132,17 €).</p>
+</article>
+<article class="paso">
+<h3>Cambios de grupo o servicio por fecha</h3>
+<p>En Editar perfil puedes indicar uno o varios cambios de grupo de libres o de servicio (diurno/búho/SRN) a partir de una fecha. El calendario usa el grupo correcto en cada tramo.</p>
+</article>
+<article class="paso">
+<h3>Incidencias de líneas</h3>
+<p>Nuevo acceso en el menú Información que abre el estado de la red.</p>
+</article>
+<article class="paso">
+<h3>Recordatorios de solicitud unificados</h3>
+<p>Los recordatorios para solicitar días libres se gestionan en 'Mis recordatorios'. Puedes añadirlos eligiendo el día a librar: la app calcula el aviso 7 meses antes en verano y 1 año antes el resto del año.</p>
+</article>
+<article class="paso">
+<h3>Importar nombramiento (OCR) mejorado</h3>
+<p>Lee mejor el lugar de fin (nombres de 2+ palabras) y detecta los turnos de Aumento por su código (5xx, 8xx, 9xx).</p>
+</article>
+<article class="paso">
+<h3>PDF de calendario rediseñado</h3>
+<p>Los calendarios exportados (mensual y anual) tienen un diseño más limpio con tarjetas, paleta suave y leyenda en chips.</p>
+</article>
+<article class="paso">
+<h3>Vacaciones y cambios pulidos</h3>
+<p>Vacaciones con barras de acento y botones nuevos. Al borrar un cambio caducado, el día se conserva en la agenda; puedes borrar solo la foto de una papeleta para ahorrar espacio.</p>
+</article>
+</div></details>
+<details class="sec n2" id="novedades-v1-26">
+<summary>Novedades v1.26</summary>
+<div class="dentro">
+<article class="paso">
+<h3>Agenda con cronología</h3>
+<p>La Agenda estrena un diseño de línea de tiempo: cada día es una 'estación' (círculo) unida por una línea. Hoy en naranja, días trabajados con aro azul y libranzas con aro discontinuo. Arriba, una tarjeta con el mes y tus estadísticas (trabajados, libranzas y horas nocturnas). El contador de libranzas ahora cuenta todas las del cuadrante, no solo las guardadas a mano.</p>
+</article>
+<article class="paso">
+<h3>Calendario renovado</h3>
+<p>Selector Mensual/Anual tipo pestaña, leyenda de colores plegable, y las estadísticas del mes (Libres, Fest. librados, Fest. trabajados, Con turno) en tarjetas debajo del calendario.</p>
+</article>
+<article class="paso">
+<h3>Estadísticas del mes con dinero</h3>
+<p>Nueva tarjeta destacada con el TOTAL ganado en el mes (nocturnas + partidos). En Partidos se separan los turnos Mixtos (laborable y sábado) con sus tarifas.</p>
+</article>
+<article class="paso">
+<h3>Foto en el carnet de Perfil</h3>
+<p>El perfil tiene aspecto de carnet. Toca el recuadro de la foto para ponerte una imagen (cámara o galería); si no, se muestran tus iniciales.</p>
+</article>
+<article class="paso">
+<h3>Volumen del sonido de teclas</h3>
+<p>En Opciones → Sonido puedes ajustar el volumen del clic de los botones con un deslizador.</p>
+</article>
+<article class="paso">
+<h3>Juegos con nuevos iconos</h3>
+<p>Bus Game, Sopa de Letras y Bubble Shooter estrenan iconos.</p>
+</article>
+</div></details>
+</div></details>
+</main>
+
+<footer>
+<p>AgendaBus es una aplicación independiente hecha por Mario Fernández Calle. <strong>No está
+afiliada a EMT Madrid S.A.</strong> Lo que cuenta este manual es cómo funciona la app; para dudas
+de convenio, tu delegado.</p>
+<p><a href="privacidad.html">Política de privacidad</a> ·
+<a href="mailto:mariofdez86@gmail.com">mariofdez86@gmail.com</a></p>
+</footer>
+
+<script>
+(function () {
+  var caja = document.getElementById('q');
+  var cuantos = document.getElementById('cuantos');
+  var pasos = Array.prototype.slice.call(document.querySelectorAll('article.paso'));
+  var secciones = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+
+  function sinTildes(t) {
+    return t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  }
+  pasos.forEach(function (p) { p.dataset.busca = sinTildes(p.textContent); });
+  secciones.forEach(function (s) {
+    s.dataset.busca = sinTildes(s.querySelector('summary').textContent);
+  });
+
+  function filtrar() {
+    var q = sinTildes(caja.value.trim());
+    if (!q) {
+      pasos.forEach(function (p) { p.hidden = false; });
+      secciones.forEach(function (s) { s.hidden = false; s.open = false; });
+      cuantos.textContent = '';
+      return;
+    }
+    var hallados = 0;
+    pasos.forEach(function (p) {
+      var vale = p.dataset.busca.indexOf(q) >= 0;
+      p.hidden = !vale;
+      if (vale) hallados++;
+    });
+    secciones.forEach(function (s) {
+      var propios = s.querySelectorAll('article.paso:not([hidden])').length;
+      var porTitulo = s.dataset.busca.indexOf(q) >= 0;
+      if (porTitulo) {
+        s.querySelectorAll('article.paso').forEach(function (p) { p.hidden = false; });
+      }
+      var vale = porTitulo || propios > 0;
+      s.hidden = !vale;
+      s.open = vale;
+    });
+    // Una sección que solo contenía subsecciones vacías tampoco pinta nada.
+    secciones.slice().reverse().forEach(function (s) {
+      if (s.hidden) return;
+      var hayPasos = s.querySelector('article.paso:not([hidden])');
+      var hayHijas = s.querySelector('details.sec:not([hidden])');
+      if (!hayPasos && !hayHijas && s.dataset.busca.indexOf(q) < 0) s.hidden = true;
+    });
+    cuantos.textContent = hallados === 0 ? 'Nada con «' + caja.value.trim() + '»'
+                        : hallados === 1 ? '1 explicación' : hallados + ' explicaciones';
+  }
+
+  caja.addEventListener('input', filtrar);
+  document.getElementById('abrir').addEventListener('click', function () {
+    secciones.forEach(function (s) { s.open = true; });
+  });
+  document.getElementById('cerrar').addEventListener('click', function () {
+    secciones.forEach(function (s) { s.open = false; });
+  });
+
+  // Un enlace del índice tiene que abrir el apartado, no solo saltar a él.
+  function abrirDestino() {
+    var id = location.hash.slice(1);
+    if (!id) return;
+    var d = document.getElementById(id);
+    while (d) {
+      if (d.tagName === 'DETAILS') d.open = true;
+      d = d.parentElement;
+    }
+    var destino = document.getElementById(id);
+    if (destino) destino.scrollIntoView({ block: 'start' });
+  }
+  window.addEventListener('hashchange', abrirDestino);
+  abrirDestino();
+})();
+</script>
+</body>
+</html>
