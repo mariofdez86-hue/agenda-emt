@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run arranca)",
+      "Bash(npm run comprueba)",
+      "Bash(npm run arbol)",
+      "Bash(node --check:*)",
+      "Bash(python3 -m http.server:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git branch:*)",
+      "Bash(git fetch:*)",
+      "Bash(curl -sI http://localhost:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(cat:*)",
+      "Bash(grep:*)",
+      "Bash(sed -n:*)",
+      "Bash(wc:*)",
+      "Bash(file:*)",
+      "Bash(convert:*)"
+    ]
+  }
+}

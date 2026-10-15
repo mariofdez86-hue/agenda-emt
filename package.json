@@ -1,0 +1,11 @@
+{
+  "name": "agenda-emt",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Agenda de turnos para conductores de EMT Madrid",
+  "scripts": {
+    "arranca": "python3 -m http.server 8080",
+    "comprueba": "node --input-type=module -e \"import{readdirSync,statSync,readFileSync}from'node:fs';import{join}from'node:path';import{execFileSync}from'node:child_process';let n=0,e=0;const anda=d=>{for(const f of readdirSync(d)){const p=join(d,f);if(f==='.git'||f==='node_modules')continue;if(statSync(p).isDirectory()){anda(p);continue}if(f.endsWith('.js')){n++;try{execFileSync(process.execPath,['--check',p],{stdio:'pipe'})}catch(x){e++;console.error('JS  '+p+'\\n'+String(x.stderr))}}else if(f.endsWith('.json')||f.endsWith('.webmanifest')){n++;try{JSON.parse(readFileSync(p,'utf8'))}catch(x){e++;console.error('JSON '+p+': '+x.message)}}}};anda('.');console.log(n+' ficheros comprobados, '+e+' con errores');process.exit(e?1:0)\"",
+    "arbol": "find calendario docs .claude -type f | sort"
+  }
+}
