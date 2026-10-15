@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calendario · Agenda de turnos EMT</title>
+<meta name="description" content="Tu cuadrante, tus turnos y lo que llevas trabajado. Para conductores de EMT Madrid.">
+
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#080C18">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Calendario">
+<link rel="apple-touch-icon" href="./iconos/icono-192.png">
+<link rel="icon" href="./iconos/icono-192.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="./css/estilos.css">
+</head>
+<body>
+
+<header class="cabecera">
+  <button id="abrir-menu" class="icono-boton" aria-label="Abrir menú">☰</button>
+  <div class="cabecera-titulo">
+    <b id="rotulo">Calendario</b>
+    <span>Agenda de turnos · EMT</span>
+  </div>
+</header>
+
+<div id="velo" class="velo"></div>
+
+<nav id="menu" class="menu" aria-label="Menú principal">
+  <div class="menu-marca">
+    <b>Calendario</b>
+    <span>Agenda de turnos</span>
+  </div>
+  <ul class="menu-lista"></ul>
+  <p class="menu-pie">Tus datos solo están en este móvil.</p>
+</nav>
+
+<main id="pantalla" class="pantalla"></main>
+
+<script type="module" src="./js/app.js"></script>
+</body>
+</html>
