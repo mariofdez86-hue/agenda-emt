@@ -21,6 +21,8 @@ Todo en **español**: interfaz, nombres de ficheros, variables, comentarios y co
 | `capturas/` | Capturas e icono que usan las páginas. |
 | `calendario/` | **Proyecto nuevo.** La app de agenda de turnos. Aquí se trabaja. |
 | `docs/` | Notas de diseño y análisis de apps de referencia. |
+| `docs/shifter-referencia.md` | Qué hace Shifter, qué copiamos y qué no. |
+| `docs/rea.md` | REA: cómo mirar Shifter por dentro. |
 | `.claude/commands/` | Órdenes de terminal (ver abajo). |
 
 ## El proyecto nuevo: `calendario/`
@@ -113,6 +115,7 @@ Se escriben con `/` en la terminal de Claude Code. Están en `.claude/commands/`
 | `/estado` | Resumen de en qué punto está el proyecto y qué toca ahora. |
 | `/limpia` | Borra restos: ficheros sueltos, código muerto, pantallas huérfanas. |
 | `/convenio <tema>` | Apunta en `docs/convenio.md` una regla del convenio para aplicarla. |
+| `/rea <apk>` | Analiza el APK de Shifter con REA y actualiza el análisis. |
 
 Y las que ya trae Claude Code: `/init`, `/code-review`, `/simplify`,
 `/security-review`, `/config`, `/fast`.
@@ -124,3 +127,18 @@ npm run arranca      # servidor local en http://localhost:8080/calendario/
 npm run comprueba    # sintaxis de todos los .js y .json
 npm run arbol        # estructura del proyecto
 ```
+
+## REA
+
+[REA](https://github.com/morluto/rea) analiza apps sin tener su código, APK de Android
+incluidos. Lo usamos para entender Shifter por dentro. Instalación, comandos y límites,
+en `docs/rea.md`.
+
+```bash
+npm install --global rea-agents           # la CLI
+rea setup --client claude_code            # registrar el MCP (lo lanza Mario, no el agente)
+rea decode-android-resources shifter.apk --locale es --format md
+```
+
+De REA salen **ideas y estructura**. Código, textos e imágenes de Shifter, no:
+`calendario/` se escribe entero aquí.
